@@ -1,0 +1,106 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<header>
+	<h1>jQuery CSS3 Callbacks Plugin</h1>
+	<p>Provides an easy cross-browser solution to getting JavaScript callbacks from CSS3 transitions and animations. Works in all browsers where these features are supported.</p>
+</header>
+<div role="main">
+
+	<h2>Example</h2>
+
+	<div id="transitionDemo" class="circle blue">
+	    Hover for a transition!
+	</div>
+	
+	<div id="animationDemo" class="circle red">
+	    Hover for an animation!
+	</div>
+	
+	<!-- Debug Console -->
+	<br /><textarea id="debugArea" rows="2" cols="30" readonly="readonly"></textarea>
+
+	<h2>Basic Usage</h2>
+	<pre>$('#transitionDemo').cssTransitionEnd(function(e){
+	// Called when transition ends
+});</pre>
+
+	<pre>$('#animationDemo').cssAnimationEnd(function(e){
+	// Called when animation ends
+});</pre>
+
+	<p>Sometimes you may wish to have the what happens after a transition ends relate to something like a hover state. Below you can find one possible way to handle this. It's the same code used by the blue circle in the example above.</p>
+	<pre>$('#transitionDemo').hover(function(){
+	$(this).addClass('active');
+},function(){
+	$(this).removeClass('active');
+});
+
+$('#transitionDemo').cssTransitionEnd(function(e){
+	if($(this).hasClass('active'))
+		console.log('Left circle is fully gray');
+	else
+		console.log('Left circle is fully blue');
+});</pre>
+
+</div>
+<footer>
+
+</footer>
+
+<script src="jquery-1.7.2.js"></script>
+<script src="jquery.css3callbacks.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	/* transition callback demo */
+	$('#transitionDemo').hover(function(){
+		$(this).addClass('active');
+	},function(){
+		$(this).removeClass('active');
+	});
+	$('#transitionDemo').cssTransitionEnd(function(e){
+		if($(this).hasClass('active'))
+			debugMsg('Left circle is fully gray');
+		else
+			debugMsg('Left circle is fully blue');
+	});
+	
+	/* animation callback demo */
+	$('#animationDemo').mouseover(function(){
+		$(this).addClass('active');
+	});
+	$('#animationDemo').cssAnimationEnd(function(e){
+		$(this).removeClass('active');
+		debugMsg('Right circle animation is done');
+	});
+	
+	/* debug stuff for demo */
+	$debugArea = $('#debugArea');
+	$debugArea.val('');
+	var debugLine = 1;
+	function debugMsg( msg ) {
+		console.log(msg);
+		$debugArea.val( $debugArea.val() + (debugLine++) + ': ' + msg + "\n" );
+		$debugArea.scrollTop( $debugArea[0].scrollHeight - $debugArea.height() );
+	}
+	
+});
+
+</script>
+
+</body>
+</html>
